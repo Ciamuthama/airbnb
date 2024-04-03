@@ -1,12 +1,15 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import { Link } from 'expo-router'
 
-const Index = () => {
+const Explore = () => {
   return (
     <View>
-      <Text>Index</Text>
+     <Link href={"/(modals)/login"}>Login</Link>
+     <Link href={"/(modals)/booking"}>Booking</Link>
+     <Link href={"/listing/1"}>Detail</Link>
     </View>
   )
 }
 
-export default Index
+export default Explore
