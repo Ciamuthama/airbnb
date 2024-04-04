@@ -105,10 +105,10 @@ router.push('/(modals)/login')
   return (
       <JsStack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(modals)/login" options={{ title:'Login or sign up', presentation:"modal", animation: "fade", headerLeft: ()=>(
+        <Stack.Screen name="(modals)/login" options={{ title:'Log in or sign up', headerTitleAlign:"center",headerTitleStyle:{fontSize:18,fontWeight:"700"}, presentation:"modal", animation: "fade", headerLeft: ()=>(
           <TouchableOpacity onPress={()=>router.back()}><Ionicons name='close-outline' size={24}/></TouchableOpacity>
         ) }} />
-        <Stack.Screen name='(modals)/booking' options={{presentation:'transparentModal', headerLeft: ()=>(
+        <Stack.Screen name='(modals)/booking' options={{presentation:'transparentModal',  headerLeft: ()=>(
           <TouchableOpacity onPress={()=>router.back()}><Ionicons name='close-outline' size={24}/></TouchableOpacity>
         )}}/>
       </JsStack>
