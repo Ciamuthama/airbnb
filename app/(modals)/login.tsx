@@ -5,18 +5,61 @@ import { TextInput } from "react-native-gesture-handler";
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { useOAuth, SignedIn, SignedOut } from "@clerk/clerk-expo";
+import { useOAuth, useSignUp,SignedIn } from "@clerk/clerk-expo";
 import { AntDesign,FontAwesome6,FontAwesome } from '@expo/vector-icons';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const Login = () => {
+
+  const {isLoaded, signUp,setActive} = useSignUp();
+
+  const[emailAddress,setEmailAddress]=React.useState("")
+  const [password, setPassword] =React.useState("")
+  const [pendingVerification,setPendingVerification] = React.useState(false)
+  const [code,setCode]=React.useState("")
+
+  const onSignUpPress=async()=>{
+    if(!isLoaded){
+      return;
+    }
+
+    try{
+      await signUp.create({
+        emailAddress,
+        password,
+      })
+      await signUp.prepareEmailAddressVerification({strategy:"email_code"})
+
+      setPendingVerification(true)
+    } catch(err:any){
+      console.log(JSON.stringify(err,null,2));
+      
+    }
+  }
+
+  const onPressVerify=async()=>{
+    if(!isLoaded){
+      return;
+    }
+
+    try{
+      const completeSignUp = await signUp.attemptEmailAddressVerification({code})
+      await setActive({session : completeSignUp.createdSessionId})
+    } catch(err:any){
+      console.error(JSON.stringify(err,null,2));
+      
+    }
+  }
+
+
+
   useWarmUpBrowser();
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const onPress = React.useCallback(async () => {
     try {
-      const { createdSessionId, signIn, signUp, setActive } =
+      const { createdSessionId, setActive } =
         await startOAuthFlow();
 
       if (createdSessionId) {
@@ -30,6 +73,8 @@ const Login = () => {
   }, []);
   return (
     <View style={{ flex: 1, marginHorizontal: 10 }}>
+      {!pendingVerification &&(
+      <>
       <Text
         style={{ fontWeight: "700", fontSize: 24, fontFamily: "SpaceLato" }}
       >
@@ -49,6 +94,8 @@ const Login = () => {
           autoComplete="email"
           keyboardType="email-address"
           style={{ marginHorizontal: 20 }}
+          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+          value={emailAddress}
         />
       </View>
       <View
@@ -64,6 +111,8 @@ const Login = () => {
           placeholder="Password"
           secureTextEntry={true}
           style={{ marginHorizontal: 20 }}
+          value={password}
+          onChangeText={(password) => setPassword(password)}
         />
       </View>
       <Text style={{ marginVertical: 10, fontFamily: "SpaceLato" }}>
@@ -90,6 +139,7 @@ const Login = () => {
           borderRadius: 10,
           marginVertical: 10,
         }}
+        onPress={onSignUpPress}
       >
         <Text
           style={{
@@ -103,6 +153,9 @@ const Login = () => {
           Continue
         </Text>
       </TouchableOpacity>
+      </>
+      )}
+
       <View
         style={{
           flexDirection: "row",
@@ -127,8 +180,30 @@ const Login = () => {
             width: 175,
             marginLeft: 10,
           }}
-        ></View>
+        >
+
+        </View>
       </View>
+
+        {pendingVerification &&(
+          <View>
+          <View>
+            <TextInput
+              value={code}
+              placeholder="Code..."
+              onChangeText={(code) => setCode(code)}
+            />
+          </View>
+          <TouchableOpacity onPress={onPressVerify}>
+            <Text>Verify Email</Text>
+          </TouchableOpacity>
+        </View>
+        )}
+
+        <SignedIn>
+          <Text>You are signed in 🤗</Text>
+        </SignedIn>
+
       <View style={{rowGap:10}}>
       <TouchableOpacity style={{borderRadius:10,borderColor:'black', borderWidth:1,padding:13,alignItems:"center",justifyContent:"center",flexDirection:"row"}} onPress={onPress}>
         <FontAwesome name="phone" size={24} color="black" style={{ flexDirection:"column",right:93}} />
