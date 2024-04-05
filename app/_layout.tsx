@@ -36,7 +36,7 @@ import {
 import { withLayoutContext } from 'expo-router'
 import { useAuth } from '@clerk/clerk-expo';
 import React from 'react';
-import { ClerkProvider } from '@clerk/clerk-react';
+import { ClerkProvider } from '@clerk/clerk-expo';
 
 
 export {
@@ -73,8 +73,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return( <ClerkProvider
-  tokenCache={tokenCache}
+  return( <ClerkProvider  tokenCache={tokenCache}
   publishableKey={CLERK_PUBLISHABLE_KEY!}
 >
     <RootLayoutNav />
