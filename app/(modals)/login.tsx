@@ -51,7 +51,7 @@ const Login = () => {
             router.back()
         }
       }catch (err:any){
-        console.log("oauth error", err);
+        alert("an error occurred  trying to connect you");;
       }
   }
   
@@ -69,7 +69,7 @@ const Login = () => {
 
       setPendingVerification(true)
     } catch(err:any){
-      console.log("oauth error", err);
+      alert("an error occurred  trying to connect you");
       
     }
   }
@@ -83,8 +83,7 @@ const Login = () => {
       const completeSignUp = await signUp.attemptEmailAddressVerification({code})
       await setActive({session : completeSignUp.createdSessionId})
     } catch(err:any){
-      console.error(JSON.stringify(err,null,2));
-      
+      alert("Please verify your code or try resending the code again");
     }
   }
 

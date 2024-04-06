@@ -54,7 +54,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceLato: require('../assets/fonts/NunitoSans.ttf'),
+    SpaceLato: require('../assets/fonts/DMSans.ttf'),
     ...FontAwesome.font,
   });
 
