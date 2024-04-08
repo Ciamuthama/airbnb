@@ -1,21 +1,30 @@
-import { View, Text, TouchableOpacity,Image } from 'react-native'
+import { View, Text, TouchableOpacity,Image,StyleSheet } from 'react-native'
 import React from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { Link } from 'expo-router'
 import { Ionicons,Entypo  } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { category } from '@/constants/Category';
+import * as Haptic from 'expo-haptics';
 
+interface Props {
+  onCategoryChange : (category:string)=>void;
+}
  
 
-const Exploreheader = () => {
+const Exploreheader = ({onCategoryChange}:Props) => {
+const ref = React.useRef<Array<TouchableOpacity | null>>([]);
+const [activeIndex,setActiveIndex] = React.useState(0);
 
-   
+const selectCategory = (index: number)=>{
+  setActiveIndex(index)
 
-
+  Haptic.impactAsync(Haptic.ImpactFeedbackStyle.Light);
+  onCategoryChange(category[index].name)
+}
   return (
     <SafeAreaView style={{flex:1,marginBottom:150,backgroundColor: "white"}}>
-    <View style={{height:150}}>
+    <View style={{height:120}}>
       <View style={{backgroundColor: "white", height:50,marginHorizontal:20, borderRadius:50,borderWidth:0.2,borderColor:'gray',elevation:3, paddingHorizontal:10,marginTop:10,justifyContent:"space-between",alignItems:"center",flexDirection:"row"}}>
         <Link href={"/(modals)/booking"} asChild>
             <TouchableOpacity style={{flexDirection:"row",alignItems:"center", gap:10}}>
@@ -36,12 +45,12 @@ const Exploreheader = () => {
          <Ionicons name="options" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal style={{marginHorizontal:10,}}>
+      <ScrollView horizontal style={{marginHorizontal:20,}}  showsHorizontalScrollIndicator={false}>
         {category.map((a,b)=>( 
-         <View key={b} style={{justifyContent:"center",alignItems:"center"}}> 
-         <Image source={a.icon} style={{height:25,width:25,marginBottom:5}}/>
-         <Text style={{marginHorizontal:10,fontFamily:"SpaceLato",fontWeight:"500",fontSize:12}}>{a.name}</Text>
-         </View>
+         <TouchableOpacity key={b} onPress={()=>selectCategory(b)} activeOpacity={0.9} ref={(el)=>ref.current[b] = el} style={activeIndex === b ? styles.activeBtn : styles.inactiveBtn}> 
+         <Image source={a.icon} style={activeIndex === b ? styles.activeImage : styles.inactiveImage}/>
+         <Text style={activeIndex === b ? styles.activeText : styles.inactiveText}>{a.name}</Text>
+         </TouchableOpacity>
         ))}
       </ScrollView>
     </View>
@@ -51,3 +60,32 @@ const Exploreheader = () => {
 }
 
 export default Exploreheader
+
+const styles = StyleSheet.create({
+  activeBtn:{
+    borderBottomColor:"black",
+    borderBottomWidth:2,
+    justifyContent:'center',
+    alignItems:"center"
+  },
+  activeImage:{
+    tintColor:"black",
+    height:25,width:25,marginBottom:5
+  },
+  inactiveImage:{
+    tintColor:"gray",
+    height:25,width:25,marginBottom:5
+  },
+  inactiveBtn:{
+    color:"gray",
+    tintColor:"gray",
+    justifyContent:'center',
+    alignItems:"center"
+  },
+  activeText:{
+    marginHorizontal:10,fontFamily:"SpaceLato",fontWeight:"500",fontSize:12
+  },
+  inactiveText:{
+    marginHorizontal:10,fontFamily:"SpaceLato",fontWeight:"500",fontSize:12,color:"gray"
+  }
+})

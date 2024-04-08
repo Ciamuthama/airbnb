@@ -4,7 +4,7 @@ import React from 'react'
 const Index = () => {
   return (
     <View>
-      <Text className="text-red-300 font-bold">Index</Text>
+      <Text className="text-base">Index</Text>
     </View>
   )
 }

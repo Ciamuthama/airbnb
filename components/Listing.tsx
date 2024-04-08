@@ -1,12 +1,24 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView, FlatList } from 'react-native'
 import React from 'react'
 
-const Listing = () => {
+interface Props{
+  Listings:any[],
+  category:string
+}
+const Listing = ({Listings,category}:Props) => {
+  React.useEffect(() => {
+    console.log('Listing', category)
+  }, [category])
+
   return (
     <View>
-      <Text>Listing</Text>
+      <FlatList
+        data={Listings}
+        keyExtractor={(list) => list.id}
+        renderItem={({ item }) => <Text>{item.host_location}</Text>}
+      />
     </View>
-  )
+  );
 }
 
 export default Listing
