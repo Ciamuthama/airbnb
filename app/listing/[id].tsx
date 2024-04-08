@@ -2,11 +2,11 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
 
-const Details = () => {
+const Details = ({items}:any) => {
     const {id} = useLocalSearchParams<{id: string}>();
   return (
     <View>
-      <Text>Details{id}</Text>
+      <Text>{id}</Text>
     </View>
   )
 }
