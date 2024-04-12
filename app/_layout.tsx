@@ -1,11 +1,11 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import "../global.css"
-import { useFonts } from 'expo-font';
+import { useFonts, Nunito_700Bold, Nunito_500Medium, Nunito_600SemiBold } from '@expo-google-fonts/nunito';
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import * as SecureStore from "expo-secure-store"
 const CLERK_PUBLISHABLE_KEY= process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -37,6 +37,8 @@ import { withLayoutContext } from 'expo-router'
 import { useAuth } from '@clerk/clerk-expo';
 import React from 'react';
 import { ClerkProvider } from '@clerk/clerk-expo';
+import { StatusBar } from 'expo-status-bar';
+import Colors from '@/constants/Colors';
 
 
 export {
@@ -54,8 +56,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceLato: require('../assets/fonts/DMSans.ttf'),
-    ...FontAwesome.font,
+    Nunito_500Medium , Nunito_700Bold, Nunito_600SemiBold
+    
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -96,7 +98,7 @@ const router = useRouter()
 const {isLoaded,isSignedIn} = useAuth()
 
 React.useEffect(()=>{
-if(isLoaded && !isSignedIn){
+if(isLoaded && isSignedIn){
 router.push('/(modals)/login')
 }
 },[isLoaded])
@@ -104,12 +106,28 @@ router.push('/(modals)/login')
   return (
       <JsStack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(modals)/login" options={{ title:'Log in or sign up', headerTitleAlign:"center",headerTitleStyle:{fontSize:18,fontWeight:"700"}, presentation:"modal", animation: "fade", headerLeft: ()=>(
+        <Stack.Screen name="listing/[id]" options={{ title:"", headerTransparent:true,headerBackTitleStyle:{fontSize:18}, animation: "fade", headerLeft: ()=>(
+          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,marginLeft:15,padding:7}} onPress={()=>router.back()}>
+            <MaterialIcons name="arrow-back" size={16} color="black" />
+            </TouchableOpacity>
+        ),headerRight:()=>(
+          <View style={{flexDirection:"row",gap:10,marginRight:15}}>
+          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7}}>
+          <Ionicons name="share-social" size={16} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7}}>
+            
+          <Ionicons name="heart-outline" size={16} color="black" />
+          </TouchableOpacity>
+          </View>
+        ) }} />
+        <Stack.Screen name="(modals)/login" options={{ title:'Log in or sign up', headerTitleAlign:"center",headerTitleStyle:{fontSize:18,fontFamily:"Nunito_700Bold"}, presentation:"modal", animation: "fade", headerLeft: ()=>(
           <TouchableOpacity onPress={()=>router.back()}><Ionicons name='close-outline' size={24}/></TouchableOpacity>
         ) }} />
         <Stack.Screen name='(modals)/booking' options={{presentation:'transparentModal',  headerLeft: ()=>(
           <TouchableOpacity onPress={()=>router.back()}><Ionicons name='close-outline' size={24}/></TouchableOpacity>
         )}}/>
+       
       </JsStack>
   );
 }

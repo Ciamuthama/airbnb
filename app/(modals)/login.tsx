@@ -7,6 +7,7 @@ import { Link, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useOAuth, useSignUp,SignedIn } from "@clerk/clerk-expo";
 import { AntDesign,FontAwesome6,FontAwesome } from '@expo/vector-icons';
+import { StatusBar } from "expo-status-bar";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -48,54 +49,52 @@ const Login = () => {
         
         if(createdSessionId){
             setActive!({session:createdSessionId})
-            router.back()
+            router.push("/")
         }
       }catch (err:any){
         alert("an error occurred  trying to connect you");;
       }
   }
   
-  const onSignUpPress=async()=>{
-    if(!isLoaded){
-      return;
-    }
+  // const onSignUpPress=async()=>{
+  //   if(!isLoaded){
+  //     return;
+  //   }
 
-    try{
-      await signUp.create({
-        emailAddress,
-        password,
-      })
-      await signUp.prepareEmailAddressVerification({strategy:"email_code"})
+  //   try{
+  //     await signUp.create({
+  //       emailAddress,
+  //       password,
+  //     })
+  //     await signUp.prepareEmailAddressVerification({strategy:"email_code"})
 
-      setPendingVerification(true)
-    } catch(err:any){
-      alert("an error occurred  trying to connect you");
+  //     setPendingVerification(true)
+  //   } catch(err:any){
+  //     alert("an error occurred  trying to connect you");
       
-    }
-  }
+  //   }
+  // }
 
-  const onPressVerify=async()=>{
-    if(!isLoaded){
-      return;
-    }
+  // const onPressVerify=async()=>{
+  //   if(!isLoaded){
+  //     return;
+  //   }
 
-    try{
-      const completeSignUp = await signUp.attemptEmailAddressVerification({code})
-      await setActive({session : completeSignUp.createdSessionId})
-    } catch(err:any){
-      alert("Please verify your code or try resending the code again");
-    }
-  }
+  //   try{
+  //     const completeSignUp = await signUp.attemptEmailAddressVerification({code})
+  //     await setActive({session : completeSignUp.createdSessionId})
+  //   } catch(err:any){
+  //     alert("Please verify your code or try resending the code again");
+  //   }
+  // }
 
 
 
   useWarmUpBrowser();
   return (
     <View style={{ flex: 1, marginHorizontal: 10 }}>
-      {!pendingVerification &&(
-      <>
       <Text
-        style={{ fontWeight: "700", fontSize: 24, fontFamily: "SpaceLato" }}
+        style={{fontSize: 24, fontFamily: "Nunito_700Bold" }}
       >
         Welcome to Airbnb
       </Text>
@@ -134,7 +133,7 @@ const Login = () => {
           onChangeText={(password) => setPassword(password)}
         />
       </View>
-      <Text style={{ marginVertical: 10, fontFamily: "SpaceLato" }}>
+      <Text style={{ marginVertical: 10, fontFamily: "Nunito_500Medium" }}>
         We'll call or text you to confirm your number. Standard message and data
         rates apply.
         <Link href={".."}>
@@ -158,22 +157,19 @@ const Login = () => {
           borderRadius: 10,
           marginVertical: 10,
         }}
-        onPress={onSignUpPress}
       >
         <Text
           style={{
             textAlign: "center",
             color: "white",
             fontSize: 17,
-            fontFamily: "SpaceLato",
-            fontWeight: "700",
+            fontFamily: "Nunito_600SemiBold",
+            
           }}
         >
           Continue
         </Text>
       </TouchableOpacity>
-      </>
-      )}
 
       <View
         style={{
@@ -191,7 +187,7 @@ const Login = () => {
             marginRight: 10,
           }}
         ></View>
-        <Text style={{ fontFamily: "SpaceLato" }}>or</Text>
+        <Text style={{ fontFamily: "Nunito_600SemiBold" }}>or</Text>
         <View
           style={{
             borderColor: "gray",
@@ -203,52 +199,34 @@ const Login = () => {
 
         </View>
       </View>
-
-        {pendingVerification &&(
-          <View>
-          <View>
-            <TextInput
-              value={code}
-              placeholder="Code..."
-              onChangeText={(code) => setCode(code)}
-            />
-          </View>
-          <TouchableOpacity onPress={onPressVerify}>
-            <Text>Verify Email</Text>
-          </TouchableOpacity>
-        </View>
-        )}
-
-        <SignedIn>
-          <Text>You are signed in 🤗</Text>
-        </SignedIn>
-
+   
       <View style={{rowGap:10}}>
       <TouchableOpacity style={{borderRadius:10,borderColor:'black', borderWidth:1,padding:13,alignItems:"center",justifyContent:"center",flexDirection:"row"}} onPress={()=>onSelectedAuth(Strategy.Google)}>
         <FontAwesome name="phone" size={24} color="black" style={{ flexDirection:"column",right:93}} />
-        <Text style={{textAlign:"center", fontWeight:"700",fontSize:16,fontFamily: "SpaceLato"}}> Continue with Phone</Text>
+        <Text style={{textAlign:"center" ,fontSize:16,fontFamily: "Nunito_700Bold"}}> Continue with Phone</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{borderRadius:10,borderColor:'black', borderWidth:1,padding:13,alignItems:"center",justifyContent:"center",flexDirection:"row"}} onPress={()=>onSelectedAuth(Strategy.Google)}>
         <AntDesign name="google" size={24} color="black" style={{ flexDirection:"column",right:90}} />
-        <Text style={{textAlign:"center", fontWeight:"700",fontSize:16,fontFamily: "SpaceLato"}}> Continue with Google</Text>
+        <Text style={{textAlign:"center" ,fontSize:16,fontFamily: "Nunito_700Bold"}}> Continue with Google</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{borderRadius:10,borderColor:'black', borderWidth:1,padding:13,alignItems:"center",justifyContent:"center",flexDirection:"row"}} onPress={()=>onSelectedAuth(Strategy.Apple)}>
         <AntDesign name="apple1" size={24} color="black" style={{ flexDirection:"column",right:93}} />
-        <Text style={{textAlign:"center", fontWeight:"700",fontSize:16,fontFamily: "SpaceLato"}}> Continue with Apple</Text>
+        <Text style={{textAlign:"center",fontSize:16,fontFamily: "Nunito_700Bold"}}> Continue with Apple</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{borderRadius:10,borderColor:'black', borderWidth:1,padding:13,alignItems:"center",justifyContent:"center",flexDirection:"row"}} onPress={()=>onSelectedAuth(Strategy.Facebook)}>
         <AntDesign name="facebook-square" size={24} color="black" style={{ flexDirection:"column",right:78}} />
-        <Text style={{textAlign:"center", fontWeight:"700",fontSize:16,fontFamily: "SpaceLato"}}> Continue with Facebook</Text>
+        <Text style={{textAlign:"center", fontSize:16,fontFamily: "Nunito_700Bold"}}> Continue with Facebook</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{borderRadius:10,borderColor:'black', borderWidth:1,padding:13,alignItems:"center",justifyContent:"center",flexDirection:"row"}} onPress={()=>onSelectedAuth(Strategy.Microsoft)}>
         <FontAwesome6 name="microsoft" size={24} color="black" style={{ flexDirection:"column",right:77}} />
-        <Text style={{textAlign:"center", fontWeight:"700",fontSize:16,fontFamily: "SpaceLato"}}> Continue with Microsoft</Text>
+        <Text style={{textAlign:"center", fontSize:16,fontFamily: "Nunito_700Bold"}}> Continue with Microsoft</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{borderRadius:10,borderColor:'black', borderWidth:1,padding:13,alignItems:"center",justifyContent:"center",flexDirection:"row"}} onPress={()=>onSelectedAuth(Strategy.LinkedIn)}>
         <AntDesign name="linkedin-square" size={24} color="black" style={{ flexDirection:"column",right:80}} />
-        <Text style={{textAlign:"center", fontWeight:"700",fontSize:16,fontFamily: "SpaceLato"}}> Continue with LinkedIn</Text>
+        <Text style={{textAlign:"center", fontSize:16,fontFamily: "Nunito_700Bold"}}> Continue with LinkedIn</Text>
       </TouchableOpacity>
       </View>
+      <StatusBar style="dark"/>
     </View>
   );
 };
