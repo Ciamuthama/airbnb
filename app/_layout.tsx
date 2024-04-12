@@ -39,6 +39,7 @@ import React from 'react';
 import { ClerkProvider } from '@clerk/clerk-expo';
 import { StatusBar } from 'expo-status-bar';
 import Colors from '@/constants/Colors';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 
 export {
@@ -107,10 +108,14 @@ router.push('/(modals)/login')
       <JsStack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="listing/[id]" options={{ title:"", headerTransparent:true,headerBackTitleStyle:{fontSize:18}, animation: "fade", headerLeft: ()=>(
+          <BottomSheetModalProvider>
+
           <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,marginLeft:15,padding:7}} onPress={()=>router.back()}>
             <MaterialIcons name="arrow-back" size={16} color="black" />
             </TouchableOpacity>
+          </BottomSheetModalProvider>
         ),headerRight:()=>(
+          <BottomSheetModalProvider>
           <View style={{flexDirection:"row",gap:10,marginRight:15}}>
           <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7}}>
           <Ionicons name="share-social" size={16} color="black" />
@@ -120,6 +125,7 @@ router.push('/(modals)/login')
           <Ionicons name="heart-outline" size={16} color="black" />
           </TouchableOpacity>
           </View>
+          </BottomSheetModalProvider>
         ) }} />
         <Stack.Screen name="(modals)/login" options={{ title:'Log in or sign up', headerTitleAlign:"center",headerTitleStyle:{fontSize:18,fontFamily:"Nunito_700Bold"}, presentation:"modal", animation: "fade", headerLeft: ()=>(
           <TouchableOpacity onPress={()=>router.back()}><Ionicons name='close-outline' size={24}/></TouchableOpacity>

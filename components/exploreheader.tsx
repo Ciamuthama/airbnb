@@ -54,9 +54,9 @@ const [activeIndex,setActiveIndex] = React.useState(0);
          <Ionicons name="options-outline" size={20} color="black" />
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal style={{marginHorizontal:20}}  >
+      <ScrollView horizontal style={{marginHorizontal:20}} showsHorizontalScrollIndicator={false} ref={scrollRef}>
         {category.map((a,b)=>( 
-         <TouchableOpacity onPress={()=>selectCategory(b)} activeOpacity={0.9} ref={(el)=>ref.current[b] == el} style={activeIndex == b ? styles.activeBtn : styles.inactiveBtn}> 
+         <TouchableOpacity key={b} onPress={()=>selectCategory(b)} activeOpacity={0.9} ref={(el)=>ref.current[b] == el} style={activeIndex == b ? styles.activeBtn : styles.inactiveBtn}> 
          <Image source={a.icon} style={activeIndex == b ? styles.activeImage : styles.inactiveImage}/>
          <Text style={activeIndex == b ? styles.activeText : styles.inactiveText}>{a.name}</Text>
          </TouchableOpacity>

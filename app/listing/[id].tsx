@@ -1,6 +1,6 @@
-import { View, Text, Image, TouchableOpacity,ScrollView, Dimensions } from 'react-native'
-import React from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { View, Text, Image, TouchableOpacity,ScrollView, Dimensions, Button } from 'react-native'
+import React, { useCallback, useMemo, useRef } from 'react'
+import { Link, useLocalSearchParams, useRouter } from 'expo-router'
 import ListingData from "@/assets/data/airbnb-listings.json"
 import { ListingList } from '@/constants/listingsitems'
 import { AntDesign, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons'
@@ -12,18 +12,28 @@ import Star from "@/assets/images/star.svg"
 import Superhost from "@/assets/images/Superhost.svg"
 import SelfCheck from "@/assets/images/SelfCheck.svg"
 import Cancel from "@/assets/images/Cancel.svg"
+import Super from "@/assets/images/Super.svg"
+import BottomSheet, { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet'
+import About from '../(modals)/about'
+
 
 const Details = ({items}:any) => {
   const router = useRouter();
   const {width} = Dimensions.get("window")
-    const {id} = useLocalSearchParams<{id: string}>();
+    const {id} = useLocalSearchParams();
     const listing: ListingList  = (ListingData as any).find((item: any) => item.id === id)
 
     const getYear = (date: any) => {
       const d = new Date(date);
       return (new Date().getFullYear() - d.getFullYear());
     };
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+    const handlePresentModalPress = useCallback(() => {
+      bottomSheetModalRef.current?.present();
+    }, []);
+   
   return (
+<BottomSheetModalProvider>
     <View>
       <Animated.ScrollView>
         <Animated.Image source={{uri: listing.xl_picture_url}} style={{position:'relative',height:300,width}}/> 
@@ -60,7 +70,7 @@ const Details = ({items}:any) => {
           <Text style={{color:Colors.gray,fontFamily:"Nunito_500Medium",fontSize:12}}>{listing.features.includes("Host Is Superhost") ? "Superhost · ":""}{getYear(listing.host_since) } years hosting</Text></View>
         </View>
 
-        <View style={{justifyContent:"center",marginHorizontal:20,borderBottomColor:Colors.gray,borderBottomWidth:1,gap:5,paddingVertical:15}}>
+        <View style={{marginHorizontal:20,borderBottomColor:Colors.gray,borderBottomWidth:1,gap:15,paddingVertical:15}}>
           {listing.amenities.includes("Pool")? 
         <View style={{flexDirection:"row",gap:15}}>
           <Dive width={25} height={25} fill={"black"}/>
@@ -76,22 +86,56 @@ const Details = ({items}:any) => {
         <SelfCheck width={25} height={25} fill={"black"}/>
         <View>
           <Text style={{fontFamily:"Nunito_700Bold",fontSize:15}}>Self check-in</Text>
-          <Text  style={{fontFamily:"Nunito_500Medium",fontSize:12,color:Colors.gray}}>You can check in with the building staff</Text>
+          <Text  style={{fontFamily:"Nunito_500Medium",fontSize:12,color:Colors.gray}}>You can check in with the building staff.</Text>
           </View>
       </View>  
       
-     :"" }
-          <Text style={{fontFamily:"Nunito_600SemiBold",fontSize:12}}>
+     :""}
+         {listing.features.includes("Host Is Superhost") ? <View style={{flexDirection:"row",gap:15}}>
+            <Super width={25} height={25} fill={"black"}/>
+            <View>
+              <Text style={{fontFamily:"Nunito_700Bold"}}>
             {listing.features.includes("Host Is Superhost") ? `${listing.host_name +" " + 'is a Superhost'}` : ""}
           </Text>
+          <Text  style={{fontFamily:"Nunito_500Medium",fontSize:12,color:Colors.gray}}>Superhost are experienced, highly rated Hosts.</Text>
+          </View>
+          </View>:""}
+
+
+
          <View style={{flexDirection:"row",gap:15}}>
           <Cancel width={25} height={25} fill={"black"}/>
           <Text style={{fontFamily:"Nunito_700Bold"}}>The cancellation policy is {listing.cancellation_policy}</Text>
           </View>
           </View>
+
+        <View style={{marginHorizontal:20,borderBottomColor:Colors.gray,borderBottomWidth:1,gap:15,paddingVertical:15}}>
+            <Text>
+              {listing.summary} {listing.notes === null ? null:(
+                <Text
+                  onPress={handlePresentModalPress}
+                  style={{
+                    fontFamily: "Nunito_700Bold",
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  See More
+                </Text>
+              )}
+            </Text>
+            <View>
+              <About
+                listing={listing}
+                bottomSheetModalRef={bottomSheetModalRef}
+              />
+            </View>
+
+
+        </View>
         </Animated.ScrollView>
         <StatusBar style="light" />
     </View>
+    </BottomSheetModalProvider>
   )
 }
 
