@@ -15,7 +15,7 @@ const About = ({ listing, bottomSheetModalRef }: any) => {
   return (
     <View>
       <BottomSheetModal ref={bottomSheetModalRef} snapPoints={snapPoints}>
-        <BottomSheetScrollView style={{ paddingHorizontal: 20,marginVertical:20 }}>
+        <BottomSheetScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20,marginVertical:20 }}>
           <View style={{gap:20}}>
             <Text style={{ fontFamily: "Nunito_600SemiBold" }}>
             {list.summary}

@@ -110,17 +110,17 @@ router.push('/(modals)/login')
         <Stack.Screen name="listing/[id]" options={{ title:"", headerTransparent:true,headerBackTitleStyle:{fontSize:18}, animation: "fade", headerLeft: ()=>(
           <BottomSheetModalProvider>
 
-          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,marginLeft:15,padding:7}} onPress={()=>router.back()}>
+          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,marginLeft:15,padding:7,elevation:1}} onPress={()=>router.back()}>
             <MaterialIcons name="arrow-back" size={16} color="black" />
             </TouchableOpacity>
           </BottomSheetModalProvider>
         ),headerRight:()=>(
           <BottomSheetModalProvider>
           <View style={{flexDirection:"row",gap:10,marginRight:15}}>
-          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7}}>
+          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7,elevation:1}}>
           <Ionicons name="share-social" size={16} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7}}>
+          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7,elevation:1}}>
             
           <Ionicons name="heart-outline" size={16} color="black" />
           </TouchableOpacity>

@@ -31,7 +31,7 @@ const Listing = ({Listings:items,category}:Props) => {
         <Link href={`/listing/${item.id}`} asChild>
         <TouchableOpacity activeOpacity={0.9}>
         <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
-          <Image source={{uri: item.xl_picture_url}} style={{height:300,width:"100%", borderRadius:20}}/>  
+          <Image source={{uri: item.xl_picture_url}} style={{height:300,width:"100%", borderRadius:12}}/>  
           <TouchableOpacity style={{position:'absolute',bottom:270,right:5,zIndex:1000,justifyContent:"center",alignItems:"center"}} >
             <Ionicons name="heart-outline" size={24} color="white"/>
             <Ionicons name="heart" size={20} color="#0202027a" style={{position:'absolute'}}/>
@@ -39,7 +39,7 @@ const Listing = ({Listings:items,category}:Props) => {
       <View style={{marginTop:5,flexDirection:"row", justifyContent:"space-between"}}>
        <View> 
         <Text style={{fontFamily:"Nunito_700Bold"}}>{item.smart_location}</Text>
-        <Text style={{fontFamily:"Nunito_600SemiBold",color:Colors.gray}}>{item.name}</Text>
+        <Text style={{fontFamily:"Nunito_600SemiBold",color:Colors.gray,fontSize:15}}>{item.name}</Text>
         <Text style={{fontFamily:"Nunito_700Bold"}}>${item.price} <Text style={{color:Colors.gray,fontWeight:"400"}}>night</Text>
         </Text>
         </View>
