@@ -22,6 +22,7 @@ import Superhost from "@/assets/images/Superhost.svg";
 import SelfCheck from "@/assets/images/SelfCheck.svg";
 import Cancel from "@/assets/images/Cancel.svg";
 import Super from "@/assets/images/Super.svg";
+import Exactlocation from "@/assets/images/Exactlocation.svg";
 import BottomSheet, {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -29,7 +30,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import About from "../(modals)/about";
 import Offer from "../(modals)/Offer";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 
 const Details = ({ items }: any) => {
   const router = useRouter();
@@ -294,11 +295,17 @@ const Details = ({ items }: any) => {
             <Offer listing={listing} />
           </View>
 
-          {/* <View style={{marginHorizontal: 20, paddingVertical: 15,gap:10}}>
-            <MapView style={{width:"100%", height:"100%"}}/>
-          </View> */}
+          <View style={{marginHorizontal: 20, paddingVertical: 15,gap:10}}>
+            <MapView initialRegion={{latitude:listing.geolocation.lat,longitude:listing.geolocation.lon,latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,}} style={{width:"100%", height:400}}>
+      <Marker coordinate={{
+                latitude:listing.geolocation.lat,
+                longitude: listing.geolocation.lon 
+              }} />
+      </MapView>
+          </View>
         </Animated.ScrollView>
-        <StatusBar barStyle="default" translucent={true} />
+        <StatusBar barStyle="default" backgroundColor={"rgba(0,0,0,0.5)"} />
       </View>
     </BottomSheetModalProvider>
   );
