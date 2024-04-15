@@ -29,8 +29,9 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import About from "../(modals)/about";
-import Offer from "../(modals)/Offer";
+import Offer from "../customes/Offer";
 import MapView, { Marker } from "react-native-maps";
+import Host from "../customes/host";
 
 const Details = ({ items }: any) => {
   const router = useRouter();
@@ -158,7 +159,7 @@ const Details = ({ items }: any) => {
             )}
             <View style={{ flexDirection: "column" }}>
               <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15.5 }}>
-                Hosted by {listing.host_name}{" "}
+                Hosted by {listing.host_name}
               </Text>
               <Text
                 style={{
@@ -295,7 +296,7 @@ const Details = ({ items }: any) => {
             <Offer listing={listing} />
           </View>
 
-          <View style={{marginHorizontal: 20, paddingVertical: 15,gap:10}}>
+          <View style={{marginHorizontal: 20, paddingVertical: 15,gap:10,borderRadius:20}}>
             <MapView initialRegion={{latitude:listing.geolocation.lat,longitude:listing.geolocation.lon,latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,}} style={{width:"100%", height:400}}>
       <Marker coordinate={{
@@ -303,6 +304,13 @@ const Details = ({ items }: any) => {
                 longitude: listing.geolocation.lon 
               }} />
       </MapView>
+          </View>
+
+          <View style={{paddingVertical: 15,gap:10,backgroundColor:"#f0efe9"}}>
+            <Host listing={listing} />
+          </View>
+          <View style={{paddingVertical: 15,gap:10,backgroundColor:"#f0efe9"}}>
+            
           </View>
         </Animated.ScrollView>
         <StatusBar barStyle="default" backgroundColor={"rgba(0,0,0,0.5)"} />
