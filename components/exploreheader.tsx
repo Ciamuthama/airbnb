@@ -26,7 +26,6 @@ const [activeIndex,setActiveIndex] = React.useState(0);
   scrollRef.current?.getScrollableNode().scrollTo({x: pageX-20, y:0, animated:true})
  })
 
-  Haptic.impactAsync(Haptic.ImpactFeedbackStyle.Light);
   onCategoryChange(category[index].name)
 }
   return (

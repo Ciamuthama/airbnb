@@ -5,7 +5,7 @@ import { useFonts, Nunito_700Bold, Nunito_500Medium, Nunito_600SemiBold } from '
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Share, Text, TouchableOpacity, View } from 'react-native';
 import * as SecureStore from "expo-secure-store"
 const CLERK_PUBLISHABLE_KEY= process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -104,29 +104,12 @@ router.push('/(modals)/login')
 }
 },[isLoaded])
 
+
+
   return (
       <JsStack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="listing/[id]" options={{ title:"", headerTransparent:true,headerBackTitleStyle:{fontSize:18}, animation: "fade", headerLeft: ()=>(
-          <BottomSheetModalProvider>
-
-          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,marginLeft:15,padding:7,elevation:1}} onPress={()=>router.back()}>
-            <MaterialIcons name="arrow-back" size={16} color="black" />
-            </TouchableOpacity>
-          </BottomSheetModalProvider>
-        ),headerRight:()=>(
-          <BottomSheetModalProvider>
-          <View style={{flexDirection:"row",gap:10,marginRight:15}}>
-          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7,elevation:1}}>
-          <Ionicons name="share-social" size={16} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7,elevation:1}}>
-            
-          <Ionicons name="heart-outline" size={16} color="black" />
-          </TouchableOpacity>
-          </View>
-          </BottomSheetModalProvider>
-        ) }} />
+        <Stack.Screen name="listing/[id]" options={{ title:"", headerTransparent:true,headerBackTitleStyle:{fontSize:18}, animation: "fade"}} />
         <Stack.Screen name="(modals)/login" options={{ title:'Log in or sign up', headerTitleAlign:"center",headerTitleStyle:{fontSize:18,fontFamily:"Nunito_700Bold"}, presentation:"modal", animation: "fade", headerLeft: ()=>(
           <TouchableOpacity onPress={()=>router.back()}><Ionicons name='close-outline' size={24}/></TouchableOpacity>
         ) }} />

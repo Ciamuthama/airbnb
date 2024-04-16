@@ -3,18 +3,18 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  ScrollView,
   Dimensions,
-  Button,
-  StatusBar
+  StatusBar,
+  Share,
+  StyleSheet
 } from "react-native";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import axios from 'axios';
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, router, useLocalSearchParams, useNavigation } from "expo-router";
 import ListingData from "@/assets/data/airbnb-listings.json";
 import { ListingList } from "@/constants/listingsitems";
 import { AntDesign, Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import Animated from "react-native-reanimated";
+import Animated, { SlideInDown, interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from "react-native-reanimated";
 import Colors from "@/constants/Colors";
 import Dive from "@/assets/images/dive.svg";
 import Star from "@/assets/images/star.svg";
@@ -34,8 +34,9 @@ import MapView, { Marker } from "react-native-maps";
 import Host from "../customes/host";
 
 const Details = ({ items }: any) => {
-  const router = useRouter();
+  const navigation = useNavigation()
   const { width } = Dimensions.get("window");
+  const Img_Height =  300
   const { id } = useLocalSearchParams();
 
 
@@ -43,6 +44,50 @@ const Details = ({ items }: any) => {
     (item: any) => item.id === id
   );
 
+  const onShare= async()=>{
+    try{
+      await Share.share({
+        title:listing.name,
+        url: listing.listing_url
+        
+      })
+    } catch(err){
+      console.log(err)
+    }
+  }
+
+  const animatedRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollOffset = useScrollViewOffset(animatedRef);
+  const headerScroll = useAnimatedStyle(() => {
+return{
+  opacity: interpolate(scrollOffset.value,[0,Img_Height/1.5],[0,1] ),
+
+}
+  })
+  useLayoutEffect(()=>{
+    navigation.setOptions({
+      headerBackground:()=>(
+        <Animated.View style={[styles.header,headerScroll]} />
+      ),
+      headerRight:()=>(
+      <BottomSheetModalProvider>
+      <View style={{flexDirection:"row",gap:10,marginRight:15}}>
+      <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7,elevation:1}} onPress={onShare}>
+      <Ionicons name="share-social" size={16} color="black" />
+      </TouchableOpacity>
+      <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,padding:7,elevation:1}}>
+      <Ionicons name="heart-outline" size={16} color="black" />
+      </TouchableOpacity>
+      </View>
+      </BottomSheetModalProvider>
+    ),headerLeft: ()=>(
+      <BottomSheetModalProvider>
+      <TouchableOpacity style={{backgroundColor:"white",borderRadius:50,marginLeft:15,padding:7,elevation:1}} onPress={()=>router.back()}>
+        <MaterialIcons name="arrow-back" size={16} color="black" />
+        </TouchableOpacity>
+      </BottomSheetModalProvider>
+    ) })
+  },[])
   const getYear = (date: any) => {
     const d = new Date(date);
     return new Date().getFullYear() - d.getFullYear();
@@ -55,10 +100,10 @@ const Details = ({ items }: any) => {
   return (
     <BottomSheetModalProvider>
       <View style={{flex:1,backgroundColor:"white"}}>
-        <Animated.ScrollView showsVerticalScrollIndicator={false}>
+        <Animated.ScrollView ref={animatedRef} showsVerticalScrollIndicator={false}>
           <Animated.Image
             source={{ uri: listing.xl_picture_url }}
-            style={{ position: "relative", height: 300, width }}
+            style={{ position: "relative", height:Img_Height, width }}
           />
           <View
             style={{
@@ -297,8 +342,8 @@ const Details = ({ items }: any) => {
           </View>
 
           <View style={{marginHorizontal: 20, paddingVertical: 15,gap:10,borderRadius:20}}>
-            <MapView initialRegion={{latitude:listing.geolocation.lat,longitude:listing.geolocation.lon,latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,}} style={{width:"100%", height:400}}>
+            <MapView  initialRegion={{latitude:listing.geolocation.lat,longitude:listing.geolocation.lon,latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,}} showsMyLocationButton={true} style={{width:"100%", height:400}}>
       <Marker coordinate={{
                 latitude:listing.geolocation.lat,
                 longitude: listing.geolocation.lon 
@@ -309,10 +354,13 @@ const Details = ({ items }: any) => {
           <View style={{paddingVertical: 15,gap:10,backgroundColor:"#f0efe9"}}>
             <Host listing={listing} />
           </View>
-          <View style={{paddingVertical: 15,gap:10,backgroundColor:"#f0efe9"}}>
-            
+          <View style={{marginHorizontal:20}}>
+            <Text style={{fontFamily:"Nunito_500Medium"}}>Report this listing</Text>
           </View>
         </Animated.ScrollView>
+        <Animated.View style={{padding:10}} entering={SlideInDown.delay(500)}>
+              <Text>Im the footer</Text>
+        </Animated.View>
         <StatusBar barStyle="default" backgroundColor={"rgba(0,0,0,0.5)"} />
       </View>
     </BottomSheetModalProvider>
@@ -320,3 +368,12 @@ const Details = ({ items }: any) => {
 };
 
 export default Details;
+const styles = StyleSheet.create({
+ header: {
+  backgroundColor:"white",
+  height:85,
+  borderBottomColor:Colors.border,
+  borderBottomWidth:0.5
+  },
+});
+
