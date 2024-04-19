@@ -149,7 +149,7 @@ const Host = ({ listing }: any) => {
         <View>
             <Text ellipsizeMode="tail" numberOfLines={2} style={{fontFamily:"Nunito_500Medium"}}>{host.host_about}</Text>
         </View>
-        <Link href={".."} style={{fontFamily:"Nunito_700Bold",textDecorationLine:"underline",textDecorationColor:"black"}}>Show more</Link>
+        <Link href={`/(modals)/WebView/${host.host_id}`} style={{fontFamily:"Nunito_700Bold",textDecorationLine:"underline",textDecorationColor:"black"}}>Show more</Link>
        { host.features.includes("Host Is Superhost") ?
        <View>
         <Text style={{fontFamily:"Nunito_700Bold",fontSize:15,paddingBottom:10}}>{host.host_name} is a Superhost</Text>

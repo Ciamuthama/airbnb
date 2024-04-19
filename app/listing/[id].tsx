@@ -354,12 +354,20 @@ return{
           <View style={{paddingVertical: 15,gap:10,backgroundColor:"#f0efe9"}}>
             <Host listing={listing} />
           </View>
-          <View style={{marginHorizontal:20}}>
-            <Text style={{fontFamily:"Nunito_500Medium"}}>Report this listing</Text>
+          <View style={{marginHorizontal:20, flexDirection:"row",gap:20,paddingVertical:20,borderTopColor:Colors.border,borderTopWidth:2}}>
+          <MaterialIcons name="flag" size={22} color="black" />
+            <Text style={{fontFamily:"Nunito_600SemiBold",fontSize: 15}}>Report this listing</Text>
           </View>
         </Animated.ScrollView>
-        <Animated.View style={{padding:10}} entering={SlideInDown.delay(500)}>
-              <Text>Im the footer</Text>
+        <Animated.View style={{paddingHorizontal:15,paddingVertical:10,flexDirection:"row",justifyContent:"space-between",alignItems:"center",borderTopColor:"rgba(225,225,225,0.5)",borderTopWidth:1}} entering={SlideInDown.delay(500)}>
+              <View style={{alignItems:"flex-start"}}>
+                <Text style={{fontFamily:"Nunito_700Bold",fontSize:16}}>${listing.price} </Text>
+                <Text style={{fontFamily:"Nunito_500Medium",fontSize:10}}>Total before taxes</Text>
+                <Text style={{fontFamily:"Nunito_700Bold",fontSize:13,textDecorationLine:"underline"}}>8-16 May</Text>
+              </View>
+              <TouchableOpacity style={{backgroundColor:Colors.primary,paddingHorizontal:30,paddingVertical:15,borderRadius:10,marginTop:10}}>
+                <Text style={{color:"white",fontFamily:"Nunito_700Bold",fontSize:15,textAlign:"center"}}>Reserve</Text>
+              </TouchableOpacity>
         </Animated.View>
         <StatusBar barStyle="default" backgroundColor={"rgba(0,0,0,0.5)"} />
       </View>

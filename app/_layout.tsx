@@ -116,6 +116,7 @@ router.push('/(modals)/login')
         <Stack.Screen name='(modals)/booking' options={{presentation:'transparentModal',  headerLeft: ()=>(
           <TouchableOpacity onPress={()=>router.back()}><Ionicons name='close-outline' size={24}/></TouchableOpacity>
         )}}/>
+          <Stack.Screen name="(modals)/WebView/[id]" options={{title:"", headerTransparent:true, animation: "fade"}} />
        
       </JsStack>
   );

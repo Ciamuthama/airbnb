@@ -29,8 +29,8 @@ const [activeIndex,setActiveIndex] = React.useState(0);
   onCategoryChange(category[index].name)
 }
   return (
-    <SafeAreaView style={{flex:1,marginBottom:130,backgroundColor: "white",paddingBottom:6.5}}>
-    <View style={{height:135,backgroundColor: "white"}}>
+    <SafeAreaView style={{flex:1,marginBottom:80,backgroundColor: "white",}}>
+    <View style={{height:140,backgroundColor: "white",borderBottomColor:"rgba(225,225,225,0.5)",borderBottomWidth:1}}>
       <View style={{alignItems:"center",justifyContent:"space-around" ,flexDirection:"row"}}>
         <Link href={"/(modals)/booking"} asChild>
             <TouchableOpacity style={{flexDirection:"row",alignItems:"center", gap:5,backgroundColor: "white",borderRadius:50,borderWidth:0.2,borderColor:'gray',elevation:3, paddingHorizontal:10,marginTop:10,height:60}}>
@@ -53,7 +53,7 @@ const [activeIndex,setActiveIndex] = React.useState(0);
          <Ionicons name="options-outline" size={20} color="black" />
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal style={{marginHorizontal:20}} showsHorizontalScrollIndicator={false} ref={scrollRef}>
+      <ScrollView horizontal style={{marginHorizontal:20,marginTop:20}} showsHorizontalScrollIndicator={false} ref={scrollRef}>
         {category.map((a,b)=>( 
          <TouchableOpacity key={b} onPress={()=>selectCategory(b)} activeOpacity={0.9} ref={(el)=>ref.current[b] == el} style={activeIndex == b ? styles.activeBtn : styles.inactiveBtn}> 
          <Image source={a.icon} style={activeIndex == b ? styles.activeImage : styles.inactiveImage}/>
@@ -78,14 +78,14 @@ const styles = StyleSheet.create({
   },
   activeImage:{
     tintColor:"black",
-    height:25,
-    width:25,
+    height:30,
+    width:30,
     marginBottom:5
   },
   inactiveImage:{
     tintColor:"gray",
-    height:25,
-    width:25,
+    height:30,
+    width:30,
     marginBottom:5
   },
   inactiveBtn:{

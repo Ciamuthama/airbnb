@@ -5,7 +5,7 @@ import {
   FlatList,
   ListRenderItem,
 } from "react-native";
-import React, {  } from "react";
+import React, { memo } from "react";
 import { Link } from "expo-router";
 // import { Image } from 'expo-image'
 import { ListingList } from "@/constants/listingsitems";
@@ -13,22 +13,20 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-sheet";
 
 
 interface Props {
   Listings: any[];
   category: string;
 }
-const Listing = ({ Listings: items, category }: Props) => {
+const Listing = memo(({ Listings: items, category }: Props) => {
   const [loading, setLoading] = React.useState(true);
+  
   const listRef = React.useRef<FlatList>(null);
-  React.useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  }, [category]);
-
  
+
+
   const RenderItems: ListRenderItem<ListingList> = ({ item }) => {
     return (
       <View style={{ flex: 1, padding: 20, backgroundColor: "white" }}>
@@ -78,7 +76,7 @@ const Listing = ({ Listings: items, category }: Props) => {
                     {item.name}
                   </Text>
                   <Text style={{ fontFamily: "Nunito_700Bold" }}>
-                    ${item.price}{" "}
+                    ${item.price}
                     <Text style={{ color: Colors.gray, fontWeight: "400" }}>
                       night
                     </Text>
@@ -95,11 +93,12 @@ const Listing = ({ Listings: items, category }: Props) => {
     <View>
       <FlatList
         ref={listRef}
-        data={loading ? [] : items}
+        data={ items}
         renderItem={RenderItems}
+        ListHeaderComponent={<Text style={{textAlign:"center",fontFamily:"Nunito_700Bold",paddingBottom:20}}>{items.length} listings</Text>}
       />
     </View>
   );
-};
+});
 
 export default Listing;

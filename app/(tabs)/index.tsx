@@ -6,8 +6,9 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Animated,
 } from "react-native";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { memo, useCallback, useMemo, useRef } from "react";
 import { Link, Stack } from "expo-router";
 import Exploreheader from "@/components/exploreheader";
 import Listing from "@/components/Listing";
@@ -23,6 +24,7 @@ import {
 import Colors from "@/constants/Colors";
 import Map from "@/assets/images/Map.svg";
 import List from "@/assets/images/List.svg";
+import { useAnimatedRef, useScrollViewOffset, useAnimatedStyle, interpolate } from "react-native-reanimated";
 
 const Explore = () => {
   const [category, setCategory] = React.useState("Island");
@@ -36,44 +38,54 @@ const Explore = () => {
 
   const CONTENT_HEIGHT = Dimensions.get("screen").height;
 
-  const snapPoints = useMemo(() => ["15%", CONTENT_HEIGHT], []);
+  const snapPoints = useMemo(() => ["10%", CONTENT_HEIGHT], []);
 
   React.useEffect(() => {
     bottomSheetModalRef.current?.snapToIndex(0);
   }, []);
 
   const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.snapToIndex(0);
+    bottomSheetModalRef.current?.collapse();
+    
   }, []);
   const handlePresentModalOpen = useCallback(() => {
     bottomSheetModalRef.current?.present();
-  }, []);
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
+    
   }, []);
 
+
+
   return (
-    <BottomSheetModalProvider>
-      <View style={{ flex: 1, backgroundColor: "white" }}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
         <Stack.Screen
           options={{
             header: () => <Exploreheader onCategoryChange={onDataChange} />,
           }}
-        />
-       
-
-        <View style={{ backgroundColor: "white" }}>
-        
+          />
+        <BottomSheetModalProvider>
+        <View style={{ backgroundColor: "white", }}>
           <BottomSheetModal
             ref={bottomSheetModalRef}
             index={1}
             snapPoints={snapPoints}
             enablePanDownToClose={false}
-            detached={true}
+            style={{
+              backgroundColor: "white",
+              elevation:4,
+              shadowColor:"black",
+              shadowOpacity:0.3,
+              shadowRadius:4,
+              shadowOffset:{
+                height:1,
+                width:1
+              },
+              borderRadius:12,
+              
+            }}
           >
             <BottomSheetFlatList showsVerticalScrollIndicator={false}
               renderItem={() => (
-                <Listing Listings={items} category={category} />
+                <Listing Listings={items} category={category}  />
               )}
               data={items}
             />
@@ -91,7 +103,7 @@ const Explore = () => {
                 style={{
                   flexDirection: "row",
                   backgroundColor: Colors.dark,
-                  padding: 15,
+                  padding: 10,
                   alignItems: "center",
                   borderRadius: 30,
                   gap: 10,
@@ -99,7 +111,7 @@ const Explore = () => {
                 onPress={handlePresentModalPress}
               >
                 <Text style={{ color: "white", fontFamily: "Nunito_700Bold" }}>
-                  Open Map
+                  Map
                 </Text>
                 <Map width={18} height={18} color="white" />
               </TouchableOpacity>
@@ -121,7 +133,7 @@ const Explore = () => {
             style={{
               flexDirection: "row",
               backgroundColor: Colors.dark,
-              padding: 15,
+              padding: 10,
               alignItems: "center",
               borderRadius: 30,
               gap: 10,
@@ -129,14 +141,14 @@ const Explore = () => {
             onPress={handlePresentModalOpen}
           >
             <Text style={{ color: "white", fontFamily: "Nunito_700Bold" }}>
-              Show List
+              List
             </Text>
             <List width={18} height={18} color="white" />
           </TouchableOpacity>
         </View>
+    </BottomSheetModalProvider>
         <StatusBar barStyle={"dark-content"} />
       </View>
-    </BottomSheetModalProvider>
   );
 };
 
